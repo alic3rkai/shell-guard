@@ -1,0 +1,15 @@
+{
+  "hooks": {
+    "SessionStart": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "if [ \"$OS\" = Windows_NT ]; then powershell.exe -NoProfile -ExecutionPolicy Bypass -File \"${CLAUDE_PLUGIN_ROOT}/hooks/detect.ps1\"; else sh \"${CLAUDE_PLUGIN_ROOT}/hooks/detect.sh\"; fi",
+            "timeout": 15
+          }
+        ]
+      }
+    ]
+  }
+}

@@ -1,0 +1,11 @@
+{
+  "name": "shell-guard",
+  "owner": { "name": "alic3rkai" },
+  "plugins": [
+    {
+      "name": "shell-guard",
+      "source": "./",
+      "description": "Tells Claude which shell and tools the user's own terminal really has."
+    }
+  ]
+}

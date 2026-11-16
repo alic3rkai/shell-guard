@@ -1,0 +1,40 @@
+name: test
+
+on: [push, pull_request]
+
+jobs:
+  unix:
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, macos-latest]
+        shell: [bash, zsh, fish]
+    runs-on: ${{ matrix.os }}
+    steps:
+      - uses: actions/checkout@v4
+      - name: Install shell
+        run: |
+          if command -v ${{ matrix.shell }} >/dev/null; then exit 0; fi
+          if [ "$RUNNER_OS" = macOS ]; then brew install ${{ matrix.shell }}; else sudo apt-get install -y ${{ matrix.shell }}; fi
+      - name: Run detect.sh as the hook would
+        run: |
+          export SHELL="$(command -v ${{ matrix.shell }})"
+          out=$(sh hooks/detect.sh)
+          echo "$out"
+          echo "$out" | grep -q "Shell: ${{ matrix.shell }} "
+          echo "$out" | grep -q "^git: /"
+          if [ "${{ matrix.shell }}" = fish ]; then echo "$out" | grep -q "fish is not POSIX"; fi
+
+  windows:
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Run the hook command through bash, as Claude Code does
+        shell: bash
+        run: |
+          export CLAUDE_PLUGIN_ROOT="$GITHUB_WORKSPACE"
+          cmd=$(python -c "import json;print(json.load(open('hooks/hooks.json'))['hooks']['SessionStart'][0]['hooks'][0]['command'])")
+          out=$(eval "$cmd")
+          echo "$out"
+          echo "$out" | grep -q "Windows PowerShell 5.1"
+          echo "$out" | grep -q "^git: "

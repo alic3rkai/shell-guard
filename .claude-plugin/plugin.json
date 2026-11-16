@@ -1,0 +1,6 @@
+{
+  "name": "shell-guard",
+  "version": "0.1.0",
+  "description": "Tells Claude which shell and tools the user's own terminal really has, so commands handed to the user actually run.",
+  "license": "MIT"
+}
