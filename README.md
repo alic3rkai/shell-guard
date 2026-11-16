@@ -43,6 +43,23 @@ Then start a new session. On Windows you can also clone the repo and double-clic
 
 `hooks/hooks.json` registers one `SessionStart` hook. On Windows it runs `hooks/detect.ps1`; elsewhere `hooks/detect.sh`. Whatever the script prints is added to Claude's context. No network, no files written.
 
+## For AI agents
+
+If a user asked you to install this plugin, here is everything you need.
+
+**Install** (run in a shell; same on Windows, macOS and Linux):
+
+```
+claude plugin marketplace add alic3rkai/shell-guard
+claude plugin install shell-guard@shell-guard
+```
+
+Check with `claude plugin list`: it should list `shell-guard@shell-guard`. Tell the user to restart Claude Code or start a new session. From then on, each session starts with a note that begins `Shell Guard: the user's own terminal`. Follow it whenever you give the user a command to run themselves: use their shell's syntax and the tool paths it lists.
+
+There are no settings. It only changes what you are told, not what your own shell tool runs: for Claude's own commands on Windows, see the PowerShell tool (`CLAUDE_CODE_USE_POWERSHELL_TOOL=1`).
+
+**Don't** edit files under `~/.claude/plugins/cache/`; they are replaced on update. **Update:** `claude plugin marketplace update shell-guard` then `claude plugin update shell-guard@shell-guard`. **Remove:** `claude plugin uninstall shell-guard@shell-guard`.
+
 ## Licence
 
 MIT
